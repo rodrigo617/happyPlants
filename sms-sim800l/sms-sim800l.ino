@@ -34,10 +34,9 @@ void setup() {
   Serial.begin(CONFIG_GSM_BAUDRATE);
   
   // IMPRIMIR EL ENCABEZADO INCIAL
-  Serial.println(F("----------------------------------------------------"));
-  Serial.println(F("    EJEMPLO ALARMA CONTRA INTRUSOS CON ALERTA SMS   "));
-  Serial.println(F("            https://www.geekfactory.mx              "));
-  Serial.println(F("----------------------------------------------------"));
+  Serial.println(F("--------------------------------------------------"));
+  Serial.println(F("    EJEMPLO ENVIO DE SMS DE FORMA AUTOMÁTICA      "));
+  Serial.println(F("--------------------------------------------------"));
   
   // INICIAR LA COMUNICACION CON EL MODULO GSM
   // PASAMOS REFERENCIA AL PUERTO SERIE USADO PARA LA COMUNICACION CON EL MODEM
@@ -52,7 +51,7 @@ void setup() {
   
   // AQUI SE REALIZA EL ENVIO DEL MENSAJE SMS
   // INDICAMOS EL NUMERO DESTINO Y EL CUERPO DEL MENSAJE
-  if (!fona.sendSMS(CONFIG_GSM_SMS_DESTINATION, "Alarma SMS encendiendo!!!")) {
+  if (!fona.sendSMS(CONFIG_GSM_SMS_DESTINATION, "Este mensaje te lo mandó el SIM800L solito!! :)")) {
     Serial.println(F("ERROR"));
   } else {
     Serial.println(F("ENVIADO"));
@@ -68,10 +67,10 @@ void loop() {
     // VOLVEMOS A REVISAR EL ESTADO DEL PIN
     if (!digitalRead(CONFIG_ALARM_PIN))
     {
-      if (!fona.sendSMS(CONFIG_GSM_SMS_DESTINATION, "MENSAJE DE ALERTA DEL SISTEMA DE ALARMA DOMESTICA!!!")) {
-        Serial.println(F("ERROR AL ENVIAR MENSAJE DE ALARMA"));
+      if (!fona.sendSMS(CONFIG_GSM_SMS_DESTINATION, "MENSAJE DE ALERTA")) {
+        Serial.println(F("ERROR AL ENVIAR MENSAJE"));
       } else {
-        Serial.println(F("MENSAJE DE ALARMA ENVIADO"));
+        Serial.println(F("MENSAJE ENVIADO"));
       }
       // PARA NO ENVIAR DEMASIADOS MENSAJES SEGUIDOS
       delay(5000);
