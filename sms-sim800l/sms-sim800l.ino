@@ -51,7 +51,7 @@ void setup() {
   
   // AQUI SE REALIZA EL ENVIO DEL MENSAJE SMS
   // INDICAMOS EL NUMERO DESTINO Y EL CUERPO DEL MENSAJE
-  if (!fona.sendSMS(CONFIG_GSM_SMS_DESTINATION, "Este mensaje te lo mandó el SIM800L solito!! :)")) {
+  if (!fona.sendSMS(CONFIG_GSM_SMS_DESTINATION, "Este mensaje te lo mandó el SIM800L solito!! :D")){
     Serial.println(F("ERROR"));
   } else {
     Serial.println(F("ENVIADO"));
