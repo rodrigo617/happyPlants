@@ -23,8 +23,7 @@
 // ****************************************************************************************
 //                        LIBRERIAS
 // ****************************************************************************************
-//#include <Timer_Virtual.h>
-#include <arduino-timer.h>
+#include <Timer_Virtual.h>
 #include <SoftwareSerial.h>
 #include "Adafruit_FONA.h"
 
@@ -35,8 +34,7 @@
 // ****************************************************************************************
 //                        HARDWARE
 // ****************************************************************************************
-//Timer_Virtual Timer = Timer_Virtual();             //
-Arduino_h = arduino-timer();             //
+Timer_Virtual Timer = Timer_Virtual();             //
 const uint8_t SWSerialTX_Pin = 3;                  // 
 const uint8_t SWSerialRX_Pin = 4;                  // 
 const uint8_t SIM800RST_Pin = 5;                   //
@@ -67,7 +65,7 @@ boolean EventHandleFlag = true;                    //
 //                        FUNCIONALIDAD
 // ****************************************************************************************
 #define BUFFER_SIZE         255                    //
-const char CelNumber[ 20 ] = { "231715402078" };   // 
+const char CelNumber[ 20 ] = { "+5492317402078" };   // 
 const char MessageOpen[ 141 ] = { "SE ABRIO LA PUERTA!\0" };//
 const char MessageClose[ 141 ] = { "SE CERRO LA PUERTA.\0" };//
 boolean SIM800Error = false;                       // 
