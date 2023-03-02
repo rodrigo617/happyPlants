@@ -4,9 +4,30 @@ int _timeout;
 String _buffer;
 //String number = "+5492317402078"; //-> change with your number
 //String number = "+34634951792"; //-> change with your number
-String number = "+13208522611"; //-> change with your number
+String number = "+13208522611";  //-> change with your number
 //String number = "444"; //-> change with your number
+
+//---------BUTTON CONFIG START---------
+
+// constants won't change. They're used here to set pin numbers:
+const int buttonPin = 2;  // the number of the pushbutton pin
+const int ledPin = 13;    // the number of the LED pin
+
+// variables will change:
+int buttonState = 0;  // variable for reading the pushbutton status
+
+//---------BUTTON CONFIG END---------
+
+
 void setup() {
+
+  // ---------LED config START---------
+  // initialize the LED pin as an output:
+  pinMode(ledPin, OUTPUT);
+  // initialize the pushbutton pin as an input:
+  pinMode(buttonPin, INPUT);
+  // ---------LED config END---------
+
   //delay(7000); //delay for 7 seconds to make sure the modules get the signal
   Serial.begin(9600);
   _buffer.reserve(50);
@@ -15,67 +36,89 @@ void setup() {
   delay(1000);
 
 
-Serial.println("Initializing...");
-delay(1000);
+  Serial.println("Initializing...");
+  delay(1000);
 
-sim.println("AT"); //Once the handshake test is successful, it will back to OK
-updateSerial();
-delay(10000);
+  sim.println("AT");  //Once the handshake test is successful, it will back to OK
+  updateSerial();
+  delay(10000);
 
-sim.println("AT+CFUN=4"); //Once the handshake test is successful, it will back to OK
-updateSerial();
-delay(10000);
+  sim.println("AT+CFUN=4");  //Once the handshake test is successful, it will back to OK
+  updateSerial();
+  delay(10000);
 
-sim.println("AT+CFUN=1"); //Once the handshake test is successful, it will back to OK
-updateSerial();
-delay(10000);
+  sim.println("AT+CFUN=1");  //Once the handshake test is successful, it will back to OK
+  updateSerial();
+  delay(10000);
 
-sim.println("AT+COPS=?"); //Check whether it has registered in the network
-updateSerial();
-delay(10000);
+  sim.println("AT+COPS=?");  //Check whether it has registered in the network
+  updateSerial();
+  delay(10000);
 
-sim.println("AT+COPS=1,0,\"UNIFON\""); //Check whether it has registered in the network
-updateSerial();
-delay(20000);
+  sim.println("AT+COPS=1,0,\"UNIFON\"");  //Check whether it has registered in the network
+  updateSerial();
+  delay(20000);
 
-sim.println("AT+COPS?"); //Check whether it has registered in the network
-updateSerial();
-delay(10000);
+  sim.println("AT+COPS?");  //Check whether it has registered in the network
+  updateSerial();
+  delay(10000);
 
-sim.println("AT+CSQ"); //Signal quality test, value range is 0-31 , 31 is the best
-updateSerial();
-delay(10000);
+  sim.println("AT+CSQ");  //Signal quality test, value range is 0-31 , 31 is the best
+  updateSerial();
+  delay(10000);
 
-sim.println("AT+CFUN=4"); //Once the handshake test is successful, it will back to OK
-updateSerial();
-delay(10000);
+  sim.println("AT+CFUN=4");  //Once the handshake test is successful, it will back to OK
+  updateSerial();
+  delay(10000);
 
-sim.println("AT+CFUN=1"); //Once the handshake test is successful, it will back to OK
-updateSerial();
-delay(10000);
+  sim.println("AT+CFUN=1");  //Once the handshake test is successful, it will back to OK
+  updateSerial();
+  delay(10000);
 
-sim.println("AT+COPS=1,0,\"PERSONAL\""); //Check whether it has registered in the network
-updateSerial();
-delay(20000);
+  sim.println("AT+COPS=1,0,\"PERSONAL\"");  //Check whether it has registered in the network
+  updateSerial();
+  delay(20000);
 
-sim.println("AT+COPS?"); //Check whether it has registered in the network
-updateSerial();
-delay(10000);
+  sim.println("AT+COPS?");  //Check whether it has registered in the network
+  updateSerial();
+  delay(10000);
 
-sim.println("AT+CSQ"); //Signal quality test, value range is 0-31 , 31 is the best
-updateSerial();
-delay(10000);
+  sim.println("AT+CSQ");  //Signal quality test, value range is 0-31 , 31 is the best
+  updateSerial();
+  delay(10000);
 
 
   Serial.println("Type s to send an SMS, r to receive an SMS, and c to make a call");
 }
 void loop() {
 
-  // updateSerial();
 
-  if (Serial.available() > 0)
-    switch (Serial.read())
-    {
+  //---------BUTTON CONFIG START---------
+  // updateSerial();
+  buttonState = digitalRead(buttonPin);
+
+  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
+  if (buttonState == HIGH) {
+    // turn LED on:
+    digitalWrite(ledPin, HIGH);
+    SendMessage();
+  } else {
+    // turn LED off:
+    digitalWrite(ledPin, LOW);
+  }
+  //---------BUTTON CONFIG END---------
+
+  if (Serial.available() > 0) {
+    
+    if (buttonState == HIGH) {
+      // turn LED on:
+      digitalWrite(ledPin, HIGH);
+      SendMessage();
+    } else {
+      // turn LED off:
+      digitalWrite(ledPin, LOW);
+    }
+    switch (Serial.read()) {
       case 's':
         SendMessage();
         break;
@@ -86,16 +129,16 @@ void loop() {
         callNumber();
         break;
     }
+  }
   if (sim.available() > 0)
     Serial.write(sim.read());
 }
-void SendMessage()
-{
-  Serial.println ("Sending Message");
-  sim.println("AT+CMGF=1");    //Sets the GSM Module in Text Mode
+void SendMessage() {
+  Serial.println("Sending Message");
+  sim.println("AT+CMGF=1");  //Sets the GSM Module in Text Mode
   delay(200);
-  Serial.println ("Set SMS Number");
-  sim.println("AT+CMGS=\"" + number + "\"\r"); //Mobile phone number to send message
+  Serial.println("Set SMS Number");
+  sim.println("AT+CMGS=\"" + number + "\"\r");  //Mobile phone number to send message
   delay(200);
   //String SMS = "Hello, how are you? greetings from miliohm.com admin";
   //String SMS = "Contestame gato!";
@@ -103,24 +146,22 @@ void SendMessage()
   //String SMS = "saldo";
   sim.println(SMS);
   delay(100);
-  sim.println((char)26);// ASCII code of CTRL+Z
+  sim.println((char)26);  // ASCII code of CTRL+Z
   delay(200);
   _buffer = _readSerial();
-  Serial.println ("Message sent");
+  Serial.println("Message sent");
 }
-void RecieveMessage()
-{
-  Serial.println ("SIM800L Read an SMS");
+void RecieveMessage() {
+  Serial.println("SIM800L Read an SMS");
   sim.println("AT+CMGF=1");
-  delay (200);
-  sim.println("AT+CNMI=1,2,0,0,0"); // AT Command to receive a live SMS
   delay(200);
-  Serial.write ("Unread Message done");
+  sim.println("AT+CNMI=1,2,0,0,0");  // AT Command to receive a live SMS
+  delay(200);
+  Serial.write("Unread Message done");
 }
 String _readSerial() {
   _timeout = 0;
-  while  (!sim.available() && _timeout < 12000  )
-  {
+  while (!sim.available() && _timeout < 12000) {
     delay(13);
     _timeout++;
   }
@@ -129,22 +170,19 @@ String _readSerial() {
   }
 }
 void callNumber() {
-  sim.print (F("ATD"));
-  sim.print (number);
-  sim.print (F(";\r\n"));
+  sim.print(F("ATD"));
+  sim.print(number);
+  sim.print(F(";\r\n"));
   _buffer = _readSerial();
   Serial.println(_buffer);
 }
 
-void updateSerial()
-{
-delay(500);
-while (Serial.available())
-{
-sim.write(Serial.read());//Forward what Serial received to Software Serial Port
-}
-while(sim.available())
-{
-Serial.write(sim.read());//Forward what Software Serial received to Serial Port
-}
+void updateSerial() {
+  delay(500);
+  while (Serial.available()) {
+    sim.write(Serial.read());  //Forward what Serial received to Software Serial Port
+  }
+  while (sim.available()) {
+    Serial.write(sim.read());  //Forward what Software Serial received to Serial Port
+  }
 }
